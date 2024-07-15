@@ -1,0 +1,11 @@
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .title {
+    flex-grow: 1;
+  }
+  
+  /* Add any additional styling as needed */
+  

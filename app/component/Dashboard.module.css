@@ -1,0 +1,40 @@
+/* Dashboard.module.css */
+
+/* body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  } */
+  
+  .appBar {
+    background-color: #1976d2;
+    color: white;
+    padding: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .leftSection {
+    display: flex;
+    align-items: center;
+  }
+  
+  .menuIcon {
+    cursor: pointer;
+    padding: 0.5rem;
+    font-size: 1.5rem;
+  }
+  
+  .title {
+    flex-grow: 1;
+    text-align: center;
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  
+  .rightSection {
+    display: flex;
+    align-items: center;
+  }
+  
