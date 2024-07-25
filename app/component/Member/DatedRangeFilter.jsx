@@ -42,7 +42,7 @@ const DateRangeFilter = ({ onDateRangeChange }) => {
         onChange={handleEndDateChange}
         sx={{ marginRight: '10px' }}
       />
-      <Button variant="contained" onClick={handleApplyFilter}>Apply</Button>
+      <Button sx={{backgroundColor:"#1976d2"}} variant="contained" onClick={handleApplyFilter}>Apply</Button>
     </Box>
   );
 };

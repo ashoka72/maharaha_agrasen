@@ -1,11 +1,9 @@
-"use client"
 import React from 'react'
-import EditUser from '../../component/EditUser'
-
+import StateDitrictManager from '../component/Input/State_DIstict'
 const page = () => {
   return (
     <div>
-      <EditUser/>
+      <StateDitrictManager/>
     </div>
   )
 }

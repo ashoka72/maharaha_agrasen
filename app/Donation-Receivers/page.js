@@ -1,5 +1,5 @@
 import React from 'react'
-import DonationReceivers from '../../component/Donation_Receiver/DonationReceivers'
+import DonationReceivers from '../component/Donation_Receiver/DonationReceivers'
 const page = () => {
   return (
     <div>

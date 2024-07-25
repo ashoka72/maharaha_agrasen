@@ -1,45 +1,44 @@
 import React from 'react';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Select, MenuItem, FormControl, InputLabel, Pagination as MuiPagination, Stack } from '@mui/material';
 
 const Pagination = ({ page, pageSize, totalPages, onPageChange, onPageSizeChange }) => {
-  const handlePageChange = (newPage) => {
-    onPageChange(newPage);
+
+  
+  const handlePageChange = (event, value) => {
+    onPageChange(value);
   };
 
-  const handlePageSizeChange = (newSize) => {
-    onPageSizeChange(newSize);
+  const handlePageSizeChange = (value) => {
+    onPageSizeChange(value);
   };
 
   return (
-    <Box mt={3} display="flex" justifyContent="flex-end" alignItems="center">
-      <Box mr={2}>
-        <Typography variant="body1">
-          Page {page} of {totalPages}
-        </Typography>
+    <Box display="flex" justifyContent="space-between" alignItems="center" mt={2}>
+      <Box display="flex" alignItems="center">
+        <MuiPagination
+          count={totalPages}
+          page={page}
+          onChange={handlePageChange}
+          showFirstButton
+          showLastButton
+        />
       </Box>
-      <Button
-        variant="outlined"
-        color="primary"
-        disabled={page === 1}
-        onClick={() => handlePageChange(page - 1)}
-      >
-        Previous
-      </Button>
-      <Box mx={2}>
+      <Box display="flex" alignItems="center">
         <Button
-          variant="outlined"
+          variant="contained"
           color="primary"
-          disabled={page === totalPages}
-          onClick={() => handlePageChange(page + 1)}
+          onClick={() => handlePageSizeChange(100)}
+          sx={{ mr: 2 }}
         >
-          Next
+          100
         </Button>
-      </Box>
-      <Box mx={2}>
-        <select value={pageSize} onChange={(e) => handlePageSizeChange(Number(e.target.value))}>
-          <option value={100}>100 per page</option>
-          <option value="all">All</option>
-        </select>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handlePageSizeChange('all')}
+        >
+          All
+        </Button>
       </Box>
     </Box>
   );

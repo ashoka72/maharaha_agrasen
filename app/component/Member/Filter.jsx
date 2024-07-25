@@ -11,7 +11,7 @@ const Filter = ({ filters, onFilterChange }) => {
   };
 
   return (
-    <div style={{ display: 'flex', gap: '10px', marginBottom: '5px', alignItems:'center'}}>
+    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px'  }}>
       <FormControl variant="outlined" style={{ minWidth: '120px' }}>
         <InputLabel>Role</InputLabel>
         <Select 
@@ -30,7 +30,7 @@ const Filter = ({ filters, onFilterChange }) => {
           />
         }
         label="Active Members Only"
-        style={{ height: '30px' }}
+        // style={{ height: '30px' }}
       />
     </div>
   );

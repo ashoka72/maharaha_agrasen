@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import { Modal, Box, Button, TextField, Typography, Select, MenuItem, InputLabel, FormControl, Checkbox, FormControlLabel, IconButton, Icon } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Modal, Box, Button, TextField, Typography, Select, MenuItem, InputLabel, FormControl, Checkbox, FormControlLabel, IconButton, Input } from '@mui/material';
 import { DatePicker } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
-import AddIcon from '@mui/icons-material/Add';
 
 const MembershipModal = () => {
   const [open, setOpen] = useState(false);
@@ -17,7 +16,6 @@ const MembershipModal = () => {
     fatherName: '',
     motherName: '',
     dob: null,
-    age: '',
     maritalStatus: '',
     spouseName: '',
     mobile: '',
@@ -25,7 +23,6 @@ const MembershipModal = () => {
     password: '',
     email: '',
     address: '',
-    block: '',
     district: '',
     state: '',
     pincode: '',
@@ -35,7 +32,7 @@ const MembershipModal = () => {
     nominee1: { name: '', relationship: '' },
     nominee2: { name: '', relationship: '' },
     disease: false,
-    diseaseFile: '',
+    diseaseFile: null,
     rulesAccepted: false,
   });
 
@@ -48,25 +45,52 @@ const MembershipModal = () => {
   };
 
   const handleDateChange = (date) => {
-    setFormData({ ...formData, dob: date, age: new Date().getFullYear() - date.getFullYear() });
+    setFormData({ ...formData, dob: date });
   };
 
-  const handleNomineeChange = (index, name, value) => {
-    const nominees = [...formData.nominees];
-    nominees[index][name] = value;
-    setFormData({ ...formData, nominees });
+  const handleNomineeChange = (index, field, value) => {
+    setFormData(prevData => {
+      const nominee1 = { ...prevData.nominee1 };
+      const nominee2 = { ...prevData.nominee2 };
+
+      if (index === 0) {
+        nominee1[field] = value;
+      } else if (index === 1) {
+        nominee2[field] = value;
+      }
+
+      return {
+        ...prevData,
+        nominee1,
+        nominee2
+      };
+    });
   };
+
+  const handleDiseaseFileChange = (e) => {
+    setFormData({ ...formData, diseaseFile: e.target.files[0] });
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setFormData({ ...formData, photo: file.name });
+    } else {
+      setFormData({ ...formData, photo: '' });
+    }
+  };
+
+  // useEffect(()=>window.alert(formData.photo),[formData.photo])
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Implement form submission logic here
     console.log('Applying for membership with:', formData);
     handleClose();
   };
 
   return (
     <div>
-      <Button variant="contained" onClick={handleOpen}>Apply for New Membership</Button>
+      <Button variant="contained" onClick={handleOpen} sx={{ backgroundColor: "#1976d2" }}>Apply for New Membership</Button>
       <Modal open={open} onClose={handleClose}>
         <Box
           component="form"
@@ -80,12 +104,11 @@ const MembershipModal = () => {
             bgcolor: 'background.paper',
             p: 4,
             boxShadow: 24,
-            maxHeight:'80vh',
-            overflowY:'auto'
-
+            maxHeight: '80vh',
+            overflowY: 'auto'
           }}
         >
-          <Typography variant="h6" component="h2">Apply for New Membership</Typography>
+          <Typography variant="h6" component="h2" sx={{ backgroundColor: "#1976d2", color: 'white', textAlign: 'center' }}>Apply for New Membership</Typography>
           <TextField
             label="Reference ID"
             name="referenceId"
@@ -109,12 +132,20 @@ const MembershipModal = () => {
             </Select>
           </FormControl>
           <div style={{ display: 'flex', gap: '10px', marginBottom: '16px' }}>
-            <IconButton>
-              <CameraAltIcon />
-            </IconButton>
-            <IconButton>
-              <PhotoLibraryIcon />
-            </IconButton>
+          <Button variant="contained" component="label">
+        Upload Photo
+        <input 
+          type="file" 
+          accept="image/*" 
+          hidden 
+          onChange={handleFileChange} 
+        />
+      </Button>
+      {formData.photo && (
+        <Typography variant="body1" sx={{ mt: 2 }}>
+          Selected File: {formData.photo}
+        </Typography>
+      )}
           </div>
           <TextField
             label="Name"
@@ -143,23 +174,31 @@ const MembershipModal = () => {
             margin="normal"
             required
           />
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
+
+
+          {/*  */}
+          <TextField
+        type="date"
+        label="Date of Birth"
+        name="dob"
+        value={formData.dob}
+        onChange={handleChange}
+        fullWidth
+        required
+        margin="normal"
+        InputLabelProps={{
+          shrink: true,
+        }}
+      />
+          {/*  */}
+          {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
               label="DOB"
               value={formData.dob}
               onChange={handleDateChange}
               renderInput={(params) => <TextField {...params} fullWidth margin="normal" />}
             />
-          </LocalizationProvider>
-          <TextField
-            label="Age"
-            name="age"
-            value={formData.age}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            // disabled
-          />
+          </LocalizationProvider> */}
           <FormControl fullWidth margin="normal">
             <InputLabel>Marital Status</InputLabel>
             <Select
@@ -191,7 +230,7 @@ const MembershipModal = () => {
             margin="normal"
             required
           />
-          <Button variant="contained" fullWidth onClick={() => {/* Implement OTP verification */}}>Verify OTP</Button>
+          <Button variant="contained" fullWidth>Verify OTP</Button>
           <TextField
             label="Password"
             name="password"
@@ -210,7 +249,7 @@ const MembershipModal = () => {
             fullWidth
             margin="normal"
           />
-          <Button variant="contained" fullWidth onClick={() => {/* Implement OTP verification */}}>Verify OTP</Button>
+          <Button variant="contained" fullWidth>Verify OTP</Button>
           <TextField
             label="Address"
             name="address"
@@ -220,32 +259,32 @@ const MembershipModal = () => {
             margin="normal"
             required
           />
-          <TextField
-            label="Block / Tehsil"
-            name="block"
-            value={formData.block}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="District"
-            name="district"
-            value={formData.district}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            required
-          />
-          <TextField
-            label="State"
-            name="state"
-            value={formData.state}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            required
-          />
+          <FormControl fullWidth margin="normal">
+            <InputLabel>District</InputLabel>
+            <Select
+              value={formData.district}
+              onChange={handleChange}
+              name="district"
+              label="District"
+            >
+              <MenuItem value="district1">District 1</MenuItem>
+              <MenuItem value="district2">District 2</MenuItem>
+              <MenuItem value="district3">District 3</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl fullWidth margin="normal">
+            <InputLabel>State</InputLabel>
+            <Select
+              value={formData.state}
+              onChange={handleChange}
+              name="state"
+              label="State"
+            >
+              <MenuItem value="state1">State 1</MenuItem>
+              <MenuItem value="state2">State 2</MenuItem>
+              <MenuItem value="state3">State 3</MenuItem>
+            </Select>
+          </FormControl>
           <TextField
             label="Pincode"
             name="pincode"
@@ -287,11 +326,10 @@ const MembershipModal = () => {
             margin="normal"
             required
           />
-          <Button variant="contained" fullWidth>Attach ID</Button>
-          <Typography variant="h6" component="h3">Nominee Details</Typography>
+          <Button variant="contained" fullWidth>Attach Voter ID/Driving License/Pan Card</Button>
+          <Typography variant="subtitle1" sx={{ mt: 2 }}>Nominee Details</Typography>
           <TextField
             label="Nominee 1 Name"
-            name="nominee1Name"
             value={formData.nominee1.name}
             onChange={(e) => handleNomineeChange(0, 'name', e.target.value)}
             fullWidth
@@ -299,7 +337,6 @@ const MembershipModal = () => {
           />
           <TextField
             label="Nominee 1 Relationship"
-            name="nominee1Relationship"
             value={formData.nominee1.relationship}
             onChange={(e) => handleNomineeChange(0, 'relationship', e.target.value)}
             fullWidth
@@ -307,7 +344,6 @@ const MembershipModal = () => {
           />
           <TextField
             label="Nominee 2 Name"
-            name="nominee2Name"
             value={formData.nominee2.name}
             onChange={(e) => handleNomineeChange(1, 'name', e.target.value)}
             fullWidth
@@ -315,34 +351,26 @@ const MembershipModal = () => {
           />
           <TextField
             label="Nominee 2 Relationship"
-            name="nominee2Relationship"
             value={formData.nominee2.relationship}
             onChange={(e) => handleNomineeChange(1, 'relationship', e.target.value)}
             fullWidth
             margin="normal"
           />
           <FormControlLabel
-            control={
-              <Checkbox
-                checked={formData.disease}
-                onChange={(e) => setFormData({ ...formData, disease: e.target.checked })}
-              />
-            }
-            label="Do you have any disease?"
+            control={<Checkbox checked={formData.disease} onChange={(e) => setFormData({ ...formData, disease: e.target.checked })} />}
+            label="Suffering from any disease"
           />
           {formData.disease && (
-            <Button variant="contained" fullWidth>Upload Disease Document</Button>
+            <Button variant="contained" component="label" fullWidth>
+              Attach Doctor’s certi2323ficate
+              <input type="file" hidden onChange={handleDiseaseFileChange} />
+            </Button>
           )}
           <FormControlLabel
-            control={
-              <Checkbox
-                checked={formData.rulesAccepted}
-                onChange={(e) => setFormData({ ...formData, rulesAccepted: e.target.checked })}
-              />
-            }
-            label="I accept the rules and regulations"
+            control={<Checkbox checked={formData.rulesAccepted} onChange={(e) => setFormData({ ...formData, rulesAccepted: e.target.checked })} />}
+            label="Accept Rules & Regulations"
           />
-          <Button type="submit" variant="contained" color="primary" fullWidth>Apply</Button>
+          <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>Submit</Button>
         </Box>
       </Modal>
     </div>

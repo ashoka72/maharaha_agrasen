@@ -31,10 +31,10 @@ import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
 import { styled } from '@mui/system';
 import Link from 'next/link';
-import Widget from '../DashboardComponent/Widget';
-import DonationForm from '../DashboardComponent/Donation';
-import DonationHistoryTable from '../DashboardComponent/Donation_History';
-import ProfileEditForm from '../DashboardComponent/Profile_Editing'
+import Widget from './DashboardComponent/Widget';
+import DonationForm from './DashboardComponent/Donation';
+import DonationHistoryTable from './DashboardComponent/Donation_History';
+import ProfileEditForm from './DashboardComponent/Profile_Editing'
 // import ProfileEditingForm from '../DashboardComponent/Profile_Editing';
 // import ChangePasswordForm from '../DashboardComponent/ChangePassword'; // Import the ChangePasswordForm component
 
